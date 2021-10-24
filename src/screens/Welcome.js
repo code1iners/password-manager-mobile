@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
-import { Text } from "react-native";
+import { SIGN_IN_TAB, SIGN_UP_TAB } from "../constants";
 import WelcomeHeader from "../components/auth/WelcomeHeader";
-import WelcomeBody from "../components/auth/WelcomeBody";
+
+import SignIn from "../screens/auth/SignIn";
+import SignUp from "../screens/auth/SignUp";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Container = styled.View`
   margin-top: 40px;
@@ -10,26 +18,27 @@ const Container = styled.View`
 `;
 
 const Welcome = () => {
-  const onHeaderSignInClick = (e) => {
-    console.log("onHeaderSignInClick");
+  const [tab, setTab] = useState(SIGN_IN_TAB);
+  const onHeaderSignInClick = () => {
+    setTab(SIGN_IN_TAB);
   };
   const onHeaderSignUpClick = () => {
-    console.log("onSignUpClick");
+    setTab(SIGN_UP_TAB);
   };
 
   return (
-    <Container>
-      {/* header */}
-      <WelcomeHeader
-        onSignInClick={onHeaderSignInClick}
-        onSignUpClick={onHeaderSignUpClick}
-      />
+    <KeyboardAwareScrollView>
+      <Container>
+        {/* header */}
+        <WelcomeHeader
+          selectedTab={tab}
+          onSignInClick={onHeaderSignInClick}
+          onSignUpClick={onHeaderSignUpClick}
+        />
 
-      {/* body */}
-      <WelcomeBody />
-
-      {/* footer */}
-    </Container>
+        {tab === SIGN_IN_TAB ? <SignIn /> : <SignUp />}
+      </Container>
+    </KeyboardAwareScrollView>
   );
 };
 

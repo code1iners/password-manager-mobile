@@ -1,12 +1,10 @@
 import React from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
-import InputWithLabel from "../shared/InputWithLabel";
+import InputWithLabel from "../../shared/InputWithLabel";
+import SimpleButton from "../../shared/SimpleButton";
 
-import SimpleButton from "../shared/SimpleButton";
-
-const Container = styled.View`
-  margin-top: 40px;
-`;
+const Container = styled.View``;
 
 const ForgotPasswordWrapper = styled.TouchableOpacity`
   margin: 10px;
@@ -17,13 +15,13 @@ const ForgotPasswordText = styled.Text`
   color: gray;
 `;
 
-const WelcomeBody = () => {
+const SignInBody = () => {
   return (
     <Container>
       {/* Email */}
       <InputWithLabel
         label="Email"
-        iconName="person-outline"
+        iconName="at-outline"
         iconSize={18}
         placeholder="Enter email.."
         textContentType="emailAddress"
@@ -53,4 +51,4 @@ const WelcomeBody = () => {
   );
 };
 
-export default WelcomeBody;
+export default SignInBody;

@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Text } from "react-native";
+import colors from "../../colors";
+import { SIGN_IN_TAB, SIGN_UP_TAB } from "../../constants";
 
 // header start.
-const Header = styled.View``;
+const Header = styled.View`
+  margin-bottom: 40px;
+`;
 const HeaderButtonContainer = styled.View`
   flex-direction: row;
 `;
@@ -16,18 +20,27 @@ const ScreenTitle = styled.Text`
   font-weight: 600;
   letter-spacing: 2px;
 `;
+
+const ButtonText = styled.Text`
+  color: ${(props) => (props.selectedTab ? colors.secondary : "black")};
+  font-weight: ${(props) => (props.selectedTab ? "600" : "500")};
+`;
 // header end.
 
-const WelcomeHeader = ({ onSignInClick, onSignUpClick }) => {
+const WelcomeHeader = ({ selectedTab, onSignInClick, onSignUpClick }) => {
   return (
     <Header>
       <HeaderButtonContainer>
         <HeaderButton onPress={onSignInClick}>
-          <Text>Sign In</Text>
+          <ButtonText selectedTab={selectedTab === SIGN_IN_TAB}>
+            Sign In
+          </ButtonText>
         </HeaderButton>
 
         <HeaderButton onPress={onSignUpClick}>
-          <Text>Sign In</Text>
+          <ButtonText selectedTab={selectedTab === SIGN_UP_TAB}>
+            Sign Up
+          </ButtonText>
         </HeaderButton>
       </HeaderButtonContainer>
 

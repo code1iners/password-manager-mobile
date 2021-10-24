@@ -1,17 +1,16 @@
 import React from "react";
 import styled from "styled-components/native";
 import { View, Text } from "react-native";
+import SignUpBody from "../../components/auth/signUp/SignUpBody";
 
 const Container = styled.View``;
 
-const SignUpTab = () => {
+const SignUp = () => {
   return (
     <Container>
-      <View>
-        <Text>SignUpTab</Text>
-      </View>
+      <SignUpBody />
     </Container>
   );
 };
 
-export default SignUpTab;
+export default SignUp;
