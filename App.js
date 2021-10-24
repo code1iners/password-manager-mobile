@@ -1,6 +1,5 @@
 import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
@@ -38,12 +37,3 @@ export default function App() {
     </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

@@ -1,0 +1,1 @@
+export const STACK_WELCOME = "STACK_WELCOME";
