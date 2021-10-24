@@ -17,9 +17,9 @@ const ButtonText = styled.Text`
   letter-spacing: 2px;
 `;
 
-const SimpleButton = ({ buttonText }) => {
+const SimpleButton = ({ buttonText, onPress }) => {
   return (
-    <ButtonWrapper>
+    <ButtonWrapper onPress={onPress}>
       <ButtonText>{buttonText}</ButtonText>
     </ButtonWrapper>
   );

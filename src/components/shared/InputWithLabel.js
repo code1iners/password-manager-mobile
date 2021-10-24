@@ -36,6 +36,11 @@ const InputWithLabel = ({
   isPassword = false,
   hasTopComponent = false,
   returnKeyType = "done",
+  onSubmitEditing,
+  reference,
+  value,
+  onChangeText,
+  autoCapitalize = "none",
 }) => {
   return (
     <Container hasTopComponent={hasTopComponent}>
@@ -47,6 +52,11 @@ const InputWithLabel = ({
           textContentType={textContentType}
           secureTextEntry={isPassword}
           returnKeyType={returnKeyType}
+          onSubmitEditing={onSubmitEditing}
+          ref={reference}
+          value={value}
+          onChangeText={onChangeText}
+          autoCapitalize={autoCapitalize}
         />
       </InputWrapper>
     </Container>

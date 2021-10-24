@@ -4,9 +4,10 @@ import { API_SERVER_URL } from "@env";
 // Reactive variables.
 
 export const isLoggedInVar = makeVar(false);
+export const tokenVar = makeVar();
 
 const client = new ApolloClient({
-  uri: API_SERVER_URL,
+  uri: String(API_SERVER_URL),
   cache: new InMemoryCache(),
 });
 
