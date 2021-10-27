@@ -11,6 +11,7 @@ import {
   SIGN_IN_TAB,
 } from "../../../constants";
 import { authTabVar, createdAuth } from "../../../../apollo";
+import { ActivityIndicator } from "react-native";
 
 const SIGN_UP_MUTATION = gql`
   mutation signUp(
@@ -160,7 +161,6 @@ const SignUpBody = () => {
       />
       {/* Email error message */}
       <ErrorMessage message={emailError} />
-
       {/* Username */}
       <InputWithLabel
         reference={usernameRef}
@@ -176,7 +176,6 @@ const SignUpBody = () => {
       />
       {/* Username error message */}
       <ErrorMessage message={usernameError} />
-
       {/* First name */}
       <InputWithLabel
         reference={firstNameRef}
@@ -192,7 +191,6 @@ const SignUpBody = () => {
       />
       {/* First name error message */}
       <ErrorMessage message={firstNameError} />
-
       {/* Last name */}
       <InputWithLabel
         reference={lastNameRef}
@@ -208,7 +206,6 @@ const SignUpBody = () => {
       />
       {/* Last name error message */}
       <ErrorMessage message={lastNameError} />
-
       {/* Password */}
       <InputWithLabel
         reference={passwordRef}
@@ -226,7 +223,6 @@ const SignUpBody = () => {
       />
       {/* Password error message */}
       <ErrorMessage message={passwordError} />
-
       {/* Confirm password */}
       <InputWithLabel
         reference={confirmPasswordRef}
@@ -244,9 +240,12 @@ const SignUpBody = () => {
       />
       {/* Confirm password error message */}
       <ErrorMessage message={confirmPasswordError} />
-
       {/* Submit button */}
-      <SimpleButton buttonText="Sign Up" onPress={handleSubmit(onValid)} />
+      <SimpleButton
+        buttonText="Sign Up"
+        onPress={handleSubmit(onValid)}
+        loading={loading}
+      />
     </Container>
   );
 };

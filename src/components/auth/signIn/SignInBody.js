@@ -11,6 +11,7 @@ import {
   ERROR_CODE_NOT_FOUND,
 } from "../../../constants";
 import { createdAuth } from "../../../../apollo";
+import { ActivityIndicator, Text } from "react-native";
 
 const SIGN_IN_MUTATION = gql`
   mutation signIn($email: String!, $password: String!) {
@@ -160,7 +161,11 @@ const SignInBody = () => {
       </ForgotPasswordWrapper>
 
       {/* Button */}
-      <SimpleButton buttonText="Sign In" onPress={handleSubmit(onValid)} />
+      <SimpleButton
+        buttonText="Sign In"
+        onPress={handleSubmit(onValid)}
+        loading={loading}
+      />
     </Container>
   );
 };

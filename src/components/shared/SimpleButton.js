@@ -1,4 +1,5 @@
 import React from "react";
+import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import colors from "../../colors";
 
@@ -13,14 +14,14 @@ const ButtonWrapper = styled.TouchableOpacity`
 const ButtonText = styled.Text`
   color: white;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px;
   letter-spacing: 2px;
 `;
 
-const SimpleButton = ({ buttonText, onPress }) => {
+const SimpleButton = ({ buttonText, onPress, loading }) => {
   return (
-    <ButtonWrapper onPress={onPress}>
-      <ButtonText>{buttonText}</ButtonText>
+    <ButtonWrapper onPress={onPress} disabled={loading}>
+      {loading ? <ActivityIndicator /> : <ButtonText>{buttonText}</ButtonText>}
     </ButtonWrapper>
   );
 };
