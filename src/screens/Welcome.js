@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { SIGN_IN_TAB, SIGN_UP_TAB } from "../constants";
 import WelcomeHeader from "../components/auth/WelcomeHeader";
@@ -11,6 +11,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { authTabVar } from "../../apollo";
+import { useReactiveVar } from "@apollo/client";
 
 const Container = styled.View`
   margin-top: 40px;
@@ -18,12 +20,12 @@ const Container = styled.View`
 `;
 
 const Welcome = () => {
-  const [tab, setTab] = useState(SIGN_IN_TAB);
+  const authTab = useReactiveVar(authTabVar);
   const onHeaderSignInClick = () => {
-    setTab(SIGN_IN_TAB);
+    authTabVar(SIGN_IN_TAB);
   };
   const onHeaderSignUpClick = () => {
-    setTab(SIGN_UP_TAB);
+    authTabVar(SIGN_UP_TAB);
   };
 
   return (
@@ -31,12 +33,12 @@ const Welcome = () => {
       <Container>
         {/* header */}
         <WelcomeHeader
-          selectedTab={tab}
+          selectedTab={authTab}
           onSignInClick={onHeaderSignInClick}
           onSignUpClick={onHeaderSignUpClick}
         />
 
-        {tab === SIGN_IN_TAB ? <SignIn /> : <SignUp />}
+        {authTab === SIGN_IN_TAB ? <SignIn /> : <SignUp />}
       </Container>
     </KeyboardAwareScrollView>
   );

@@ -19,7 +19,7 @@ export default function App() {
     return Promise.all([...fontPromises]);
   };
   const preload = async () => {
-    const token = AsyncStorage.getItem(TOKEN);
+    const token = await AsyncStorage.getItem(TOKEN);
     if (token) {
       isLoggedInVar(true);
       tokenVar(token);

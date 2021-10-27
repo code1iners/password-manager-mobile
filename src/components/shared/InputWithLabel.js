@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 
 const Container = styled.View`
-  margin-top: ${(props) => (props.hasTopComponent ? "20px" : "0")};
+  margin-top: ${(props) => (props.hasTopComponent ? "10px" : "0")};
 `;
 
 const InputWrapper = styled.View`

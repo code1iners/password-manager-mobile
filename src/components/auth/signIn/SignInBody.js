@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components/native";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import InputWithLabel from "../../shared/InputWithLabel";
 import SimpleButton from "../../shared/SimpleButton";
-import { gql, useMutation } from "@apollo/client";
-import { useForm } from "react-hook-form";
+import ErrorMessage from "../../shared/ErrorMessage";
 import { userSignIn } from "../../../hooks/useAuth";
-
 import {
-  ERROR_CODE_SIGN_IN_INCORRECT_PASSWORD,
-  ERROR_CODE_SIGN_IN_NOT_FOUND,
+  ERROR_CODE_INCORRECT_PASSWORD,
+  ERROR_CODE_NOT_FOUND,
 } from "../../../constants";
+import { createdAuth } from "../../../../apollo";
 
 const SIGN_IN_MUTATION = gql`
   mutation signIn($email: String!, $password: String!) {
@@ -17,7 +18,6 @@ const SIGN_IN_MUTATION = gql`
       ok
       token
       error
-      errorCode
     }
   }
 `;
@@ -29,49 +29,74 @@ const ForgotPasswordWrapper = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: flex-end;
 `;
-const ErrorMessage = styled.Text`
-  color: tomato;
-  margin-top: 4px;
-`;
 const ForgotPasswordText = styled.Text`
   color: gray;
 `;
 
 const SignInBody = () => {
-  const { handleSubmit, setValue, watch } = useForm();
+  // Forms.
+  const { register, handleSubmit, setValue, watch } = useForm();
+
+  // Refs.
   const passwordRef = useRef();
+
+  // States.
   const [emailError, setEmailError] = useState();
   const [passwordError, setPasswordError] = useState();
+  const createdAuthInfo = useReactiveVar(createdAuth);
 
+  useEffect(() => {
+    register("email", {
+      required: true,
+    });
+    register("password", {
+      required: true,
+    });
+    if (createdAuthInfo) {
+      setValue("email", createdAuthInfo.email);
+      setValue("password", createdAuthInfo.password);
+    }
+  }, [register, createdAuthInfo]);
+
+  // Mutations.
   const onCompleted = (data) => {
     const {
       signIn: { ok, token, error, errorCode },
     } = data;
     if (ok) {
+      // Sign in user.
       userSignIn(token);
+
+      // Created auth clear.
+      createdAuth(null);
     } else {
-      switch (errorCode) {
-        case ERROR_CODE_SIGN_IN_NOT_FOUND:
-          setEmailError(error);
+      switch (error) {
+        case ERROR_CODE_NOT_FOUND:
+          setEmailError("The email does not found.");
           break;
-        case ERROR_CODE_SIGN_IN_INCORRECT_PASSWORD:
-          setPasswordError(error);
+        case ERROR_CODE_INCORRECT_PASSWORD:
+          setPasswordError("The password incorrect.");
           break;
       }
     }
   };
-  const [loginMutation, { loading }] = useMutation(SIGN_IN_MUTATION, {
+  const [signInMutation, { loading }] = useMutation(SIGN_IN_MUTATION, {
     onCompleted,
   });
 
+  // Methods.
   const onNext = (nextElement) => {
     nextElement?.current?.focus();
   };
 
-  const onValid = (data) => {
-    // Clear error messages.
+  const clearErrorMessages = () => {
     setEmailError("");
     setPasswordError("");
+  };
+
+  const onValid = (data) => {
+    // Clear error messages.
+    clearErrorMessages();
 
     if (!watch("email")) {
       setEmailError("Email is required.");
@@ -84,7 +109,7 @@ const SignInBody = () => {
     }
 
     if (!loading) {
-      loginMutation({
+      signInMutation({
         variables: {
           ...data,
         },
@@ -108,7 +133,7 @@ const SignInBody = () => {
       />
 
       {/* Email error message */}
-      <ErrorMessage>{emailError}</ErrorMessage>
+      <ErrorMessage message={emailError} />
 
       {/* Password */}
       <InputWithLabel
@@ -127,7 +152,7 @@ const SignInBody = () => {
       />
 
       {/* Password error message */}
-      <ErrorMessage>{passwordError}</ErrorMessage>
+      <ErrorMessage message={passwordError} />
 
       {/* Forget password */}
       <ForgotPasswordWrapper>
