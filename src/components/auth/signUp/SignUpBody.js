@@ -240,6 +240,7 @@ const SignUpBody = () => {
       />
       {/* Confirm password error message */}
       <ErrorMessage message={confirmPasswordError} />
+
       {/* Submit button */}
       <SimpleButton
         buttonText="Sign Up"

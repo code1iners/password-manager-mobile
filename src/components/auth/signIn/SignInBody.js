@@ -160,7 +160,7 @@ const SignInBody = () => {
         <ForgotPasswordText>Forget password?</ForgotPasswordText>
       </ForgotPasswordWrapper>
 
-      {/* Button */}
+      {/* Submit button */}
       <SimpleButton
         buttonText="Sign In"
         onPress={handleSubmit(onValid)}

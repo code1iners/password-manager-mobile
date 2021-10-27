@@ -8,6 +8,7 @@ import SignUp from "../screens/auth/SignUp";
 import {
   Keyboard,
   KeyboardAvoidingView,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -30,6 +31,7 @@ const Welcome = () => {
 
   return (
     <KeyboardAwareScrollView>
+      <StatusBar hidden={true} />
       <Container>
         {/* header */}
         <WelcomeHeader
