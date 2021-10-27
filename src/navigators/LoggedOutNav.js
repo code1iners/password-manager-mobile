@@ -1,6 +1,5 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import styled from "styled-components/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { STACK_WELCOME } from "../constants";
 import Welcome from "../screens/Welcome";
 

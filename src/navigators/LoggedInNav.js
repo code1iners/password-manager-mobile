@@ -1,30 +1,41 @@
 import React from "react";
-import { Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import styled from "styled-components/native";
-import { userSignOut } from "../hooks/useAuth";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import AccountsScreen from "../screens/accounts/AccountsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
+import { Ionicons } from "@expo/vector-icons";
+import TabIcon from "../components/shared/TabIcon";
 
-const LoggedInNavContainer = styled.View`
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
-const TextText = styled.Text`
-  color: black;
-`;
+const Tab = createBottomTabNavigator();
 
 const LoggedInNav = () => {
-  const onSignOut = () => {
-    userSignOut();
-  };
-
   return (
-    <LoggedInNavContainer>
-      <TextText>Logged in nav</TextText>
-      <TouchableOpacity onPress={onSignOut}>
-        <Text>Sign out</Text>
-      </TouchableOpacity>
-    </LoggedInNavContainer>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          borderTopColor: "rgba(255,255,255,0.3)",
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Accounts"
+        component={AccountsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon iconName="document-text" focused={focused} size={28} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon iconName="settings" focused={focused} size={28} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 
