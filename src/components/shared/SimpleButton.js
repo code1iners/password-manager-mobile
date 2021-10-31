@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
-import colors from "../../colors";
+import colors from "../../utils/colors";
 
 const ButtonWrapper = styled.TouchableOpacity`
   margin-top: 20px;

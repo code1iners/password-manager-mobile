@@ -9,7 +9,7 @@ import {
   ERROR_CODE_EMAIL_ALREADY_EXISTS,
   ERROR_CODE_USERNAME_ALREADY_EXISTS,
   SIGN_IN_TAB,
-} from "../../../constants";
+} from "../../../utils/constants";
 import { authTabVar, createdAuth } from "../../../../apollo";
 import { ActivityIndicator } from "react-native";
 

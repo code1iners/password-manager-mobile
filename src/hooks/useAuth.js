@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isLoggedInVar, tokenVar } from "../../apollo";
-import { TOKEN } from "../constants";
+import { TOKEN } from "../utils/constants";
 
 export const userSignIn = async (token) => {
   await AsyncStorage.setItem(TOKEN, token);

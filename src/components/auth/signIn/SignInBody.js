@@ -6,12 +6,13 @@ import InputWithLabel from "../../shared/InputWithLabel";
 import SimpleButton from "../../shared/SimpleButton";
 import ErrorMessage from "../../shared/ErrorMessage";
 import { userSignIn } from "../../../hooks/useAuth";
-import {
-  ERROR_CODE_INCORRECT_PASSWORD,
-  ERROR_CODE_NOT_FOUND,
-} from "../../../constants";
+ERROR_CODE_NOT_FOUND;
 import { createdAuth } from "../../../../apollo";
 import { ActivityIndicator, Text } from "react-native";
+import {
+  ERROR_CODE_NOT_FOUND,
+  ERROR_CODE_INCORRECT_PASSWORD,
+} from "../../../utils/constants";
 
 const SIGN_IN_MUTATION = gql`
   mutation signIn($email: String!, $password: String!) {

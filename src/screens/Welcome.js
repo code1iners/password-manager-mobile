@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { SIGN_IN_TAB, SIGN_UP_TAB } from "../constants";
 import WelcomeHeader from "../components/auth/WelcomeHeader";
 
 import SignIn from "../screens/auth/SignIn";
@@ -14,6 +13,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { authTabVar } from "../../apollo";
 import { useReactiveVar } from "@apollo/client";
+import { SIGN_IN_TAB, SIGN_UP_TAB } from "../utils/constants";
 
 const Container = styled.View`
   margin-top: 40px;

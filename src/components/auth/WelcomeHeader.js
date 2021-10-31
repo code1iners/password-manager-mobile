@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Text } from "react-native";
-import colors from "../../colors";
-import { SIGN_IN_TAB, SIGN_UP_TAB } from "../../constants";
+import { SIGN_IN_TAB, SIGN_UP_TAB } from "../../utils/constants";
+import colors from "../../utils/colors";
 
 // header start.
 const Header = styled.View`

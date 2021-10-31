@@ -4,6 +4,7 @@ import AccountsScreen from "../screens/accounts/AccountsScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import TabIcon from "../components/shared/TabIcon";
+import SettingsNav from "./SettingsNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const LoggedInNav = () => {
       />
       <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
+        component={SettingsNav}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon iconName="settings" focused={focused} size={28} />
