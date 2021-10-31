@@ -34,6 +34,7 @@ const LoggedInNav = () => {
           tabBarIcon: ({ focused }) => (
             <TabIcon iconName="settings" focused={focused} size={28} />
           ),
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
