@@ -33,38 +33,12 @@ const SettingsScreen = ({ navigation }) => {
     navigation.navigate("ProfileScreen");
   };
 
-  /**
-   * ### When clicked sign out row.
-   * - userSignOut
-   */
-  const handleSignOutOkClick = async () => {
-    await userSignOut();
-  };
-  // Sign out 2.
-  const handleSignOutClick = () => {
-    Alert.alert("Sign Out", "Are you sure Sign out?", [
-      {
-        text: "OK",
-        onPress: handleSignOutOkClick,
-        style: "destructive",
-      },
-      {
-        text: "Cancel",
-      },
-    ]);
-  };
-
   // Menus.
   const menus = [
     {
       id: "1",
       menuName: "Profile",
       onPress: handleProfileClick,
-    },
-    {
-      id: "2",
-      menuName: "Sign Out",
-      onPress: handleSignOutClick,
     },
   ];
   const renderItem = ({ item }) => <RenderItem item={item} />;

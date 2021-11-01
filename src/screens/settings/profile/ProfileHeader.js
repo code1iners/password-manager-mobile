@@ -42,7 +42,7 @@ const EditButtonWrapper = styled.TouchableOpacity`
   align-items: center;
   justify-content: space-between;
   margin-top: 18px;
-  background-color: ${colors.blue};
+  background-color: ${colors.primary};
   padding: 14px 26px;
   border-radius: 500px;
 `;
