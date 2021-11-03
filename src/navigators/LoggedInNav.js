@@ -1,10 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import AccountsScreen from "../screens/accounts/AccountsScreen";
-import SettingsScreen from "../screens/settings/SettingsScreen";
-import { Ionicons } from "@expo/vector-icons";
 import TabIcon from "../components/shared/TabIcon";
 import SettingsNav from "./SettingsNav";
+import AccountNav from "./AccountNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,16 +17,17 @@ const LoggedInNav = () => {
       }}
     >
       <Tab.Screen
-        name="Accounts"
-        component={AccountsScreen}
+        name="AccountNav"
+        component={AccountNav}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon iconName="document-text" focused={focused} size={28} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name="SettingNav"
         component={SettingsNav}
         options={{
           tabBarIcon: ({ focused }) => (

@@ -8,11 +8,11 @@ import ErrorMessage from "../../shared/ErrorMessage";
 import { userSignIn } from "../../../hooks/useAuth";
 ERROR_CODE_NOT_FOUND;
 import { createdAuth } from "../../../../apollo";
-import { ActivityIndicator, Text } from "react-native";
 import {
   ERROR_CODE_NOT_FOUND,
   ERROR_CODE_INCORRECT_PASSWORD,
 } from "../../../utils/constants";
+import { onNext } from "../../../hooks/useFocus";
 
 const SIGN_IN_MUTATION = gql`
   mutation signIn($email: String!, $password: String!) {
@@ -87,9 +87,9 @@ const SignInBody = () => {
   });
 
   // Methods.
-  const onNext = (nextElement) => {
-    nextElement?.current?.focus();
-  };
+  // const onNext = (nextElement) => {
+  //   nextElement?.current?.focus();
+  // };
 
   const clearErrorMessages = () => {
     setEmailError("");
