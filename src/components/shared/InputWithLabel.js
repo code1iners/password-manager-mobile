@@ -18,6 +18,7 @@ const InputLabel = styled.Text`
   font-weight: 600;
   font-size: 18px;
   margin-bottom: 8px;
+  letter-spacing: 1.5px;
 `;
 
 const UsernameInput = styled.TextInput`
@@ -25,6 +26,7 @@ const UsernameInput = styled.TextInput`
   height: 30px;
   width: 100%;
   font-size: 18px;
+  letter-spacing: 1.5px;
 `;
 
 const InputWithLabel = ({

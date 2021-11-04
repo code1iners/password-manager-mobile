@@ -4,12 +4,7 @@ import WelcomeHeader from "../components/auth/WelcomeHeader";
 
 import SignIn from "../screens/auth/SignIn";
 import SignUp from "../screens/auth/SignUp";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  StatusBar,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StatusBar } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { authTabVar } from "../../apollo";
 import { useReactiveVar } from "@apollo/client";
