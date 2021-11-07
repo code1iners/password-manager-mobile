@@ -1,8 +1,8 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 
 export const GET_ACCOUNT_QUERY = gql`
-  query getAccountsWithPage($offset: Int!) {
-    getAccountsWithPage(offset: $offset) {
+  query getAccountsWithPage($offset: Int, $take: Int) {
+    getAccountsWithPage(offset: $offset, take: $take) {
       id
       title
       subtitle

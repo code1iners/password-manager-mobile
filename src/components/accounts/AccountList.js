@@ -5,11 +5,9 @@ import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import AccountItem from "./AccountItem";
 
-const Container = styled.View``;
-
 const GET_ACCOUNT_QUERY = gql`
-  query accounts($offset: Int!) {
-    accounts(offset: $offset) {
+  query accounts($offset: Int, $take: Int) {
+    accounts(offset: $offset, take: $take) {
       id
       title
       subtitle
@@ -25,9 +23,13 @@ const AccountList = () => {
   });
 
   const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
+    if (!loading) {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+    } else {
+      alert.alert("Wait", "Already getting accounts information.");
+    }
   };
 
   const [refreshing, setRefreshing] = useState(false);
