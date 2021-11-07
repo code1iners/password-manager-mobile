@@ -1,20 +1,45 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
-const CREATE_ACCOUNT_MUTATION = gql`
+export const GET_ACCOUNT_QUERY = gql`
+  query getAccountsWithPage($offset: Int!) {
+    getAccountsWithPage(offset: $offset) {
+      id
+      title
+      subtitle
+      accountName
+      accountPassword
+    }
+  }
+`;
+
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount(
     $title: String!
     $subtitle: String
     $accountName: String!
-    $password: String!
+    $accountPassword: String!
     $thumbnail: String
   ) {
     createAccount(
       title: $title
       subtitle: $subtitle
       accountName: $accountName
-      password: $password
+      accountPassword: $accountPassword
       thumbnail: $thumbnail
     ) {
+      id
+      title
+      subtitle
+      accountName
+      accountPassword
+      thumbnail
+    }
+  }
+`;
+
+export const DELETE_ACCOUNT_MUTATION = gql`
+  mutation deleteAccount($id: Int!) {
+    deleteAccount(id: $id) {
       ok
       error
     }
@@ -25,15 +50,53 @@ const CREATE_ACCOUNT_MUTATION = gql`
  * ### Account hooks.
  */
 const useAccount = () => {
+  /**
+   * ### Get account hook.
+   * @returns {Array} > [Account]
+   */
+  const getAccounts = () => {
+    return useQuery(GET_ACCOUNT_QUERY);
+  };
+
+  const updateAccount = (cache, result) => {
+    const {
+      data: { createAccount },
+    } = result;
+
+    const newAccountRef = cache.writeFragment({
+      data: createAccount,
+      fragment: gql`
+        fragment NewAccount on Account {
+          id
+          title
+          subtitle
+          accountName
+          accountPassword
+          thumbnail
+        }
+      `,
+    });
+
+    cache.modify({
+      fields: {
+        accounts(prev) {
+          return [...prev, newAccountRef];
+        },
+      },
+    });
+  };
+
   const [createAccountMutation, { loading: createAccountLoading }] =
-    useMutation(CREATE_ACCOUNT_MUTATION);
+    useMutation(CREATE_ACCOUNT_MUTATION, {
+      update: updateAccount,
+    });
 
   /**
    * ### Create account hook.
    * @param {String} title > Account title.
    * @param {String} subtitle > Account subtitle.
    * @param {String} accountName > Account accountName.
-   * @param {String} password > Account password.
+   * @param {String} accountPassword > Account accountPassword.
    * @param {String} thumbnail > Account thumbnail.
    * @returns {Object} ok (True or False), error (String)
    */
@@ -41,30 +104,62 @@ const useAccount = () => {
     title,
     subtitle,
     accountName,
-    password,
+    accountPassword,
     thumbnail,
   }) => {
     if (!createAccountLoading) {
       const {
-        data: {
-          createAccount: { ok, error },
-        },
+        data: { createAccount },
       } = await createAccountMutation({
         variables: {
           title,
           subtitle,
           accountName,
-          password,
+          accountPassword,
           thumbnail,
         },
       });
 
-      return { ok, error };
+      return createAccount;
+    }
+  };
+
+  const [deleteAccountMutation, { loading: deleteAccountLoading }] =
+    useMutation(DELETE_ACCOUNT_MUTATION);
+  /**
+   * ### Delete Account hook.
+   * @param {Number} > Account id.
+   * @returns {Object} ok (True or False), error (String)
+   */
+  const deleteAccount = async ({ id }) => {
+    if (!deleteAccountLoading) {
+      const {
+        data: {
+          deleteAccount: { ok, error },
+        },
+      } = await deleteAccountMutation({
+        variables: { id },
+        update(cache) {
+          cache.modify({
+            fields: {
+              accounts(existingAccountRefs, { readField }) {
+                return existingAccountRefs.filter(
+                  (accountRef) => id !== readField("id", accountRef)
+                );
+              },
+            },
+          });
+        },
+      });
+
+      return ok, error;
     }
   };
 
   return {
+    getAccounts,
     createAccount,
+    deleteAccount,
   };
 };
 

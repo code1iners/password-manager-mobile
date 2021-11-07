@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import { View, Text } from "react-native";
 import Fab from "../../components/shared/Fab";
+import AccountList from "../../components/accounts/AccountList";
 
 const Container = styled.View`
   flex: 1;
+  padding: 10px;
 `;
 
 const AccountMainScreen = ({ navigation }) => {
@@ -20,9 +21,7 @@ const AccountMainScreen = ({ navigation }) => {
 
   return (
     <Container>
-      <View>
-        <Text>AccountMainScreen</Text>
-      </View>
+      <AccountList />
 
       <Fab onPress={handleFabClick} />
     </Container>

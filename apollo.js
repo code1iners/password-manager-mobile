@@ -4,12 +4,15 @@ import { setContext } from "@apollo/client/link/context";
 import { API_SERVER_URL } from "@env";
 import { SIGN_IN_TAB } from "./src/utils/constants";
 import { createUploadLink } from "apollo-upload-client";
+import { offsetLimitPagination } from "@apollo/client/utilities";
+import { relayStylePagination } from "@apollo/client/utilities";
 
 // Reactive variables.
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar();
 export const authTabVar = makeVar(SIGN_IN_TAB);
 export const createdAuth = makeVar();
+export const wasAccountCreatedVar = makeVar(false);
 
 // Links.
 const uploadHttpLink = createUploadLink({
@@ -36,9 +39,19 @@ const onErrorLink = onError(({ graphQLErrors, networkError }) => {
 
 const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
 
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        accounts: offsetLimitPagination(),
+      },
+    },
+  },
+});
+
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
   link: httpLinks,
+  cache,
 });
 
 export default client;

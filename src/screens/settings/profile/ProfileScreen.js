@@ -26,7 +26,6 @@ const HeaderRightButtonText = styled.Text`
 
 const ProfileScreen = ({ navigation }) => {
   const me = useMe();
-  console.log(me);
 
   /**
    * ### When clicked sign out row.

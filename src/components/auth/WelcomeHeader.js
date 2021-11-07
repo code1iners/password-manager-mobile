@@ -21,7 +21,7 @@ const ScreenTitle = styled.Text`
 `;
 
 const ButtonText = styled.Text`
-  color: ${(props) => (props.selectedTab ? colors.secondary : "black")};
+  color: ${(props) => (props.selectedTab ? colors.secondary : colors.black)};
   font-weight: ${(props) => (props.selectedTab ? "600" : "500")};
 `;
 // header end.

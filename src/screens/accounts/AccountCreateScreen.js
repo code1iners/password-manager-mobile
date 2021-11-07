@@ -1,20 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
-import {
-  View,
-  Text,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Alert,
-} from "react-native";
+import { Alert } from "react-native";
 import { useForm } from "react-hook-form";
 import InputWithLabel from "../../components/shared/InputWithLabel";
 import { onNext } from "../../hooks/useFocus";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SimpleButton from "../../components/shared/SimpleButton";
 import ErrorMessage from "../../components/shared/ErrorMessage";
-import { gql, useMutation } from "@apollo/client";
 import useAccount from "../../hooks/useAccount";
+import { wasAccountCreatedVar } from "../../../apollo";
 
 const Container = styled.View`
   flex: 1;
@@ -51,12 +45,12 @@ const AccountCreateScreen = ({ navigation }) => {
     setValue("title", "");
     setValue("subtitle", "");
     setValue("accountName", "");
-    setValue("password", "");
+    setValue("accountPassword", "");
     setValue("thumbnail", "");
   };
 
   // Create account success handler.
-  const handleOkClick = async () => navigation.goBack();
+  const handleOkClick = () => navigation.goBack();
 
   // Handle form submit.
   const handleFormSubmit = () => {
@@ -66,7 +60,7 @@ const AccountCreateScreen = ({ navigation }) => {
     const title = getValues("title");
     const subtitle = getValues("subtitle");
     const accountName = getValues("accountName");
-    const password = getValues("password");
+    const accountPassword = getValues("accountPassword");
     const thumbnail = getValues("thumbnail");
 
     // Empty text validate.
@@ -81,12 +75,12 @@ const AccountCreateScreen = ({ navigation }) => {
       return;
     }
     if (!accountName) {
-      setAccountNameError("AccountName is required.");
+      setAccountNameError("Account name is required.");
       onNext(accountNameRef);
       return;
     }
-    if (!password) {
-      setPasswordError("Password is required.");
+    if (!accountPassword) {
+      setPasswordError("Account Password is required.");
       onNext(passwordRef);
       return;
     }
@@ -100,7 +94,7 @@ const AccountCreateScreen = ({ navigation }) => {
       title,
       subtitle,
       accountName,
-      password,
+      accountPassword,
       thumbnail,
     });
   };
@@ -110,34 +104,34 @@ const AccountCreateScreen = ({ navigation }) => {
    * @param {String} title > Account title.
    * @param {String} subtitle > Account subtitle.
    * @param {String} accountName > Account accountName.
-   * @param {String} password > Account password.
+   * @param {String} accountPassword > Account accountPassword.
    * @param {String} thumbnail > Account thumbnail.
    */
   const onValid = async ({
     title,
     subtitle,
     accountName,
-    password,
+    accountPassword,
     thumbnail,
   }) => {
-    const { ok, error } = await createAccount({
+    const newAccount = await createAccount({
       title,
       subtitle,
       accountName,
-      password,
+      accountPassword,
       thumbnail,
     });
 
-    if (ok) {
+    if (newAccount) {
       clearInputs();
-      Alert.alert("Success", "Created a new account.", [
+      Alert.alert("Success", "You have successfully created a new account.", [
         {
           text: "OK",
           onPress: handleOkClick,
         },
       ]);
     } else {
-      Alert.alert("Failure", error);
+      Alert.alert("Failure", "Failed to create new account.");
     }
   };
 
@@ -151,12 +145,14 @@ const AccountCreateScreen = ({ navigation }) => {
     register("accountName", {
       required: true,
     });
-    register("password", {
+    register("accountPassword", {
       required: true,
     });
     register("thumbnail", {
       required: true,
     });
+
+    titleRef?.current.focus();
   }, []);
 
   return (
@@ -192,7 +188,7 @@ const AccountCreateScreen = ({ navigation }) => {
           hasTopComponent={true}
         />
 
-        {/* SubtitleError error message */}
+        {/* Subtitle error message */}
         <ErrorMessage message={subtitleError} />
 
         {/* Account Name */}
@@ -209,25 +205,25 @@ const AccountCreateScreen = ({ navigation }) => {
           hasTopComponent={true}
         />
 
-        {/* AccountNameError error message */}
+        {/* Account name error message */}
         <ErrorMessage message={accountNameError} />
 
         {/* Password */}
         <InputWithLabel
           reference={passwordRef}
-          label="Password"
+          label="Account Password"
           iconName="at-outline"
           iconSize={18}
-          placeholder="Enter password.."
+          placeholder="Enter account password.."
           returnKeyType="next"
-          value={watch("password")}
-          onChangeText={(text) => setValue("password", text)}
+          value={watch("accountPassword")}
+          onChangeText={(text) => setValue("accountPassword", text)}
           onSubmitEditing={() => onNext(thumbnailRef)}
           hasTopComponent={true}
           isPassword={true}
         />
 
-        {/* PasswordError error message */}
+        {/* Account password error message */}
         <ErrorMessage message={passwordError} />
 
         {/* Thumbnail */}
@@ -244,7 +240,7 @@ const AccountCreateScreen = ({ navigation }) => {
           hasTopComponent={true}
         />
 
-        {/* ThumbnailError error message */}
+        {/* Thumbnail error message */}
         <ErrorMessage message={thumbnailError} />
 
         <SimpleButton buttonText="Create Account" onPress={handleFormSubmit} />
