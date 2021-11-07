@@ -11,7 +11,11 @@ const Stack = createStackNavigator();
 const AccountNav = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="AccountMainScreen" component={AccountMainScreen} />
+      <Stack.Screen
+        pres
+        name="AccountMainScreen"
+        component={AccountMainScreen}
+      />
       <Stack.Screen
         name="AccountCreateScreen"
         component={AccountCreateScreen}

@@ -33,15 +33,14 @@ const AccountList = () => {
     }
   };
 
-  const [scrollY, setScrollY] = useState(0);
+  const [scrollY, setScrollY] = useState();
   const onScroll = ({ nativeEvent: { contentOffset } }) => {
     const { y } = contentOffset;
     setScrollY(y);
   };
 
   useEffect(() => {
-    if (scrollY === 0) {
-    } else if (scrollY > 0) {
+    if (scrollY > 0) {
       isShownAccountsFabVar(false);
     } else {
       isShownAccountsFabVar(true);

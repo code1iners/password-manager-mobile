@@ -152,7 +152,9 @@ const AccountCreateScreen = ({ navigation }) => {
       required: true,
     });
 
-    titleRef?.current.focus();
+    setTimeout(() => {
+      titleRef?.current.focus();
+    }, 10);
   }, []);
 
   return (
