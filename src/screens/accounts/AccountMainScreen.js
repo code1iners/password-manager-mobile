@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components/native";
 import Fab from "../../components/shared/Fab";
 import AccountList from "../../components/accounts/AccountList";

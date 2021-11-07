@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { View, Text, FlatList } from "react-native";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import AccountItem from "./AccountItem";
+import { isShownAccountsFabVar } from "../../../apollo";
 
 const GET_ACCOUNT_QUERY = gql`
   query accounts($offset: Int, $take: Int) {
@@ -32,6 +33,21 @@ const AccountList = () => {
     }
   };
 
+  const [scrollY, setScrollY] = useState(0);
+  const onScroll = ({ nativeEvent: { contentOffset } }) => {
+    const { y } = contentOffset;
+    setScrollY(y);
+  };
+
+  useEffect(() => {
+    if (scrollY === 0) {
+    } else if (scrollY > 0) {
+      isShownAccountsFabVar(false);
+    } else {
+      isShownAccountsFabVar(true);
+    }
+  }, [scrollY]);
+
   const [refreshing, setRefreshing] = useState(false);
 
   return (
@@ -50,6 +66,7 @@ const AccountList = () => {
       renderItem={({ item }) => <AccountItem {...item} />}
       keyExtractor={(item) => String(item.id)}
       showsVerticalScrollIndicator={false}
+      onScroll={onScroll}
     />
   );
 };

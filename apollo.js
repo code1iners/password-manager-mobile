@@ -13,6 +13,7 @@ export const tokenVar = makeVar();
 export const authTabVar = makeVar(SIGN_IN_TAB);
 export const createdAuth = makeVar();
 export const wasAccountCreatedVar = makeVar(false);
+export const isShownAccountsFabVar = makeVar(true);
 
 // Links.
 const uploadHttpLink = createUploadLink({
