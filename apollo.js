@@ -5,7 +5,6 @@ import { API_SERVER_URL } from "@env";
 import { SIGN_IN_TAB } from "./src/utils/constants";
 import { createUploadLink } from "apollo-upload-client";
 import { offsetLimitPagination } from "@apollo/client/utilities";
-import { relayStylePagination } from "@apollo/client/utilities";
 
 // Reactive variables.
 export const isLoggedInVar = makeVar(false);

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled, { keyframe } from "styled-components/native";
+import React, { useEffect, useRef } from "react";
+import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../../utils/colors";
 import { Animated, TouchableOpacity } from "react-native";
@@ -17,6 +17,7 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
 `;
+
 const Fab = ({ onPress, isClicked }) => {
   const isShown = useReactiveVar(isShownAccountsFabVar);
   const fadeAnim = useRef(new Animated.Value(0)).current;
