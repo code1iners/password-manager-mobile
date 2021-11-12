@@ -1,29 +1,63 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
-import { Alert } from "react-native";
+import { Alert, Keyboard, Text } from "react-native";
 import { useForm } from "react-hook-form";
 import InputWithLabel from "../../components/shared/InputWithLabel";
 import { onNext } from "../../hooks/useFocus";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SimpleButton from "../../components/shared/SimpleButton";
 import ErrorMessage from "../../components/shared/ErrorMessage";
-import useAccount from "../../hooks/useAccount";
-import { wasAccountCreatedVar } from "../../../apollo";
+import useAccount, { CREATE_ACCOUNT_MUTATION } from "../../hooks/useAccount";
+import colors from "../../utils/colors";
+import { ReactNativeFile } from "extract-files";
+import { useMutation } from "@apollo/client";
 
 const Container = styled.View`
   flex: 1;
   padding: 20px;
 `;
 
-const AccountCreateScreen = ({ navigation }) => {
+const SelectPhotoContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+const SelectPhotoButton = styled.TouchableOpacity`
+  background-color: ${colors.secondary};
+  flex: 1;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+`;
+const SelectPhotoText = styled.Text`
+  color: white;
+  letter-spacing: 2px;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: capitalize;
+`;
+const SelectPhotoImage = styled.Image`
+  width: 52px;
+  height: 52px;
+  border-radius: 6px;
+  margin-right: 20px;
+`;
+
+const AccountCreateScreen = ({ route, navigation }) => {
   const { register, watch, handleSubmit, setValue, getValues } = useForm();
   const [titleError, setTitleError] = useState("");
   const [subtitleError, setSubtitleError] = useState("");
   const [accountNameError, setAccountNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [thumbnailError, setThumbnailError] = useState("");
+
+  const { selectedPhoto } = route.params || {};
 
   const { createAccount } = useAccount();
+
+  const [createAccountMutation, { loading }] = useMutation(
+    CREATE_ACCOUNT_MUTATION
+  );
 
   const titleRef = useRef();
   const subtitleRef = useRef();
@@ -37,7 +71,6 @@ const AccountCreateScreen = ({ navigation }) => {
     setSubtitleError("");
     setAccountNameError("");
     setPasswordError("");
-    setThumbnailError("");
   };
 
   // Clear input data.
@@ -46,11 +79,14 @@ const AccountCreateScreen = ({ navigation }) => {
     setValue("subtitle", "");
     setValue("accountName", "");
     setValue("accountPassword", "");
-    setValue("thumbnail", "");
   };
 
   // Create account success handler.
   const handleOkClick = () => navigation.goBack();
+
+  const handleSelectPhotoClick = () => {
+    navigation.navigate("SelectPhoto");
+  };
 
   // Handle form submit.
   const handleFormSubmit = () => {
@@ -61,7 +97,11 @@ const AccountCreateScreen = ({ navigation }) => {
     const subtitle = getValues("subtitle");
     const accountName = getValues("accountName");
     const accountPassword = getValues("accountPassword");
-    const thumbnail = getValues("thumbnail");
+    const thumbnail = new ReactNativeFile({
+      uri: selectedPhoto,
+      name: `${Date.now()}.jpg`,
+      type: "image/jpeg",
+    });
 
     // Empty text validate.
     if (!title) {
@@ -82,11 +122,6 @@ const AccountCreateScreen = ({ navigation }) => {
     if (!accountPassword) {
       setPasswordError("Account Password is required.");
       onNext(passwordRef);
-      return;
-    }
-    if (!thumbnail) {
-      setThumbnailError("Thumbnail is required.");
-      onNext(thumbnailRef);
       return;
     }
 
@@ -114,15 +149,21 @@ const AccountCreateScreen = ({ navigation }) => {
     accountPassword,
     thumbnail,
   }) => {
-    const newAccount = await createAccount({
-      title,
-      subtitle,
-      accountName,
-      accountPassword,
-      thumbnail,
+    const {
+      data: {
+        createAccount: { ok, error },
+      },
+    } = await createAccountMutation({
+      variables: {
+        title,
+        subtitle,
+        accountName,
+        accountPassword,
+        thumbnail,
+      },
     });
 
-    if (newAccount) {
+    if (ok) {
       clearInputs();
       Alert.alert("Success", "You have successfully created a new account.", [
         {
@@ -131,7 +172,7 @@ const AccountCreateScreen = ({ navigation }) => {
         },
       ]);
     } else {
-      Alert.alert("Failure", "Failed to create new account.");
+      Alert.alert("Failure", error);
     }
   };
 
@@ -146,9 +187,6 @@ const AccountCreateScreen = ({ navigation }) => {
       required: true,
     });
     register("accountPassword", {
-      required: true,
-    });
-    register("thumbnail", {
       required: true,
     });
 
@@ -220,7 +258,7 @@ const AccountCreateScreen = ({ navigation }) => {
           returnKeyType="next"
           value={watch("accountPassword")}
           onChangeText={(text) => setValue("accountPassword", text)}
-          onSubmitEditing={() => onNext(thumbnailRef)}
+          onSubmitEditing={() => Keyboard.dismiss()}
           hasTopComponent={true}
           isPassword={true}
         />
@@ -229,21 +267,23 @@ const AccountCreateScreen = ({ navigation }) => {
         <ErrorMessage message={passwordError} />
 
         {/* Thumbnail */}
-        <InputWithLabel
-          reference={thumbnailRef}
-          label="Thumbnail"
-          iconName="at-outline"
-          iconSize={18}
-          placeholder="Enter thumbnail.."
-          returnKeyType="done"
-          value={watch("thumbnail")}
-          onChangeText={(text) => setValue("thumbnail", text)}
-          onSubmitEditing={handleFormSubmit}
-          hasTopComponent={true}
-        />
+        <SelectPhotoContainer>
+          {selectedPhoto ? (
+            <SelectPhotoImage
+              source={{
+                uri: selectedPhoto,
+              }}
+            />
+          ) : null}
 
-        {/* Thumbnail error message */}
-        <ErrorMessage message={thumbnailError} />
+          <SelectPhotoButton
+            ref={thumbnailRef}
+            hasImage={selectedPhoto}
+            onPress={handleSelectPhotoClick}
+          >
+            <SelectPhotoText>Select photo</SelectPhotoText>
+          </SelectPhotoButton>
+        </SelectPhotoContainer>
 
         <SimpleButton buttonText="Create Account" onPress={handleFormSubmit} />
       </Container>

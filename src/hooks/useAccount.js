@@ -18,7 +18,7 @@ export const CREATE_ACCOUNT_MUTATION = gql`
     $subtitle: String
     $accountName: String!
     $accountPassword: String!
-    $thumbnail: String
+    $thumbnail: Upload
   ) {
     createAccount(
       title: $title
@@ -27,12 +27,8 @@ export const CREATE_ACCOUNT_MUTATION = gql`
       accountPassword: $accountPassword
       thumbnail: $thumbnail
     ) {
-      id
-      title
-      subtitle
-      accountName
-      accountPassword
-      thumbnail
+      ok
+      error
     }
   }
 `;
@@ -108,9 +104,7 @@ const useAccount = () => {
     thumbnail,
   }) => {
     if (!createAccountLoading) {
-      const {
-        data: { createAccount },
-      } = await createAccountMutation({
+      const response = await createAccountMutation({
         variables: {
           title,
           subtitle,
@@ -120,7 +114,9 @@ const useAccount = () => {
         },
       });
 
-      return createAccount;
+      console.log("response", response);
+
+      return response;
     }
   };
 

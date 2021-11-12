@@ -23,7 +23,6 @@ const ItemColumn = styled.View`
 const ItemThumbnail = styled.Image`
   width: 50px;
   height: 50px;
-  background-color: tomato;
   margin-right: 12px;
   border-radius: 4px;
 `;
@@ -45,7 +44,14 @@ const ItemRow = styled.View`
 const AccountName = styled.Text``;
 const AccountPassword = styled.Text``;
 
-const AccountItem = ({ id, title, subtitle, accountName, accountPassword }) => {
+const AccountItem = ({
+  id,
+  title,
+  subtitle,
+  accountName,
+  accountPassword,
+  thumbnail,
+}) => {
   const { deleteAccount } = useAccount();
 
   /**
@@ -76,7 +82,11 @@ const AccountItem = ({ id, title, subtitle, accountName, accountPassword }) => {
       {/* Info */}
       <ItemColumn style={{ flex: 1 }}>
         <ItemRow>
-          <ItemThumbnail />
+          <ItemThumbnail
+            source={{
+              uri: thumbnail,
+            }}
+          />
           <ItemColumn>
             {/* Account info header */}
             <ItemRow style={{ paddingBottom: 4 }}>

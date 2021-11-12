@@ -14,6 +14,7 @@ const GET_ACCOUNT_QUERY = gql`
       subtitle
       accountName
       accountPassword
+      thumbnail
     }
   }
 `;

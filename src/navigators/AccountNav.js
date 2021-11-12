@@ -1,10 +1,9 @@
 import React from "react";
-import styled from "styled-components/native";
-import { View, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AccountMainScreen from "../screens/accounts/AccountMainScreen";
 import AccountCreateScreen from "../screens/accounts/AccountCreateScreen";
-import { Ionicons } from "@expo/vector-icons";
+import SelectPhoto from "../components/shared/SelectPhoto";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +20,14 @@ const AccountNav = () => {
         component={AccountCreateScreen}
         options={{
           title: "Account Create",
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="SelectPhoto"
+        component={SelectPhoto}
+        options={{
+          headerShown: true,
           headerBackTitleVisible: false,
         }}
       />
