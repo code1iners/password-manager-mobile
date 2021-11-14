@@ -27,8 +27,12 @@ export const CREATE_ACCOUNT_MUTATION = gql`
       accountPassword: $accountPassword
       thumbnail: $thumbnail
     ) {
-      ok
-      error
+      id
+      title
+      subtitle
+      thumbnail
+      accountName
+      accountPassword
     }
   }
 `;

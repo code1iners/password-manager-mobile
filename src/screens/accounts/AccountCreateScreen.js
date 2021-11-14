@@ -82,7 +82,7 @@ const AccountCreateScreen = ({ route, navigation }) => {
   };
 
   // Create account success handler.
-  const handleOkClick = () => navigation.goBack();
+  const handleOkClick = () => navigation.navigate("AccountMainScreen");
 
   const handleSelectPhotoClick = () => {
     navigation.navigate("SelectPhoto");
@@ -134,36 +134,20 @@ const AccountCreateScreen = ({ route, navigation }) => {
     });
   };
 
-  /**
-   * ### Create account when input valid.
-   * @param {String} title > Account title.
-   * @param {String} subtitle > Account subtitle.
-   * @param {String} accountName > Account accountName.
-   * @param {String} accountPassword > Account accountPassword.
-   * @param {String} thumbnail > Account thumbnail.
-   */
-  const onValid = async ({
-    title,
-    subtitle,
-    accountName,
-    accountPassword,
-    thumbnail,
-  }) => {
+  const updateUploadAccount = (cache, result) => {
     const {
-      data: {
-        createAccount: { ok, error },
-      },
-    } = await createAccountMutation({
-      variables: {
-        title,
-        subtitle,
-        accountName,
-        accountPassword,
-        thumbnail,
-      },
-    });
+      data: { createAccount },
+    } = result;
+    if (createAccount.id) {
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: {
+          accounts(previous) {
+            return [createAccount, ...previous];
+          },
+        },
+      });
 
-    if (ok) {
       clearInputs();
       Alert.alert("Success", "You have successfully created a new account.", [
         {
@@ -172,8 +156,35 @@ const AccountCreateScreen = ({ route, navigation }) => {
         },
       ]);
     } else {
-      Alert.alert("Failure", error);
+      Alert.alert("Failure", "Failed created a new account.");
     }
+  };
+
+  /**
+   * ### Create account when input valid.
+   * @param {String} title > Account title.
+   * @param {String} subtitle > Account subtitle.
+   * @param {String} accountName > Account accountName.
+   * @param {String} accountPassword > Account accountPassword.
+   * @param {String} thumbnail > Account thumbnail.
+   */
+  const onValid = ({
+    title,
+    subtitle,
+    accountName,
+    accountPassword,
+    thumbnail,
+  }) => {
+    createAccountMutation({
+      variables: {
+        title,
+        subtitle,
+        accountName,
+        accountPassword,
+        thumbnail,
+      },
+      update: updateUploadAccount,
+    });
   };
 
   useEffect(() => {
@@ -255,12 +266,11 @@ const AccountCreateScreen = ({ route, navigation }) => {
           iconName="at-outline"
           iconSize={18}
           placeholder="Enter account password.."
-          returnKeyType="next"
+          returnKeyType="done"
           value={watch("accountPassword")}
           onChangeText={(text) => setValue("accountPassword", text)}
-          onSubmitEditing={() => Keyboard.dismiss()}
+          onSubmitEditing={() => passwordRef?.current?.blur()}
           hasTopComponent={true}
-          isPassword={true}
         />
 
         {/* Account password error message */}

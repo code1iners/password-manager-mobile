@@ -19,10 +19,12 @@ const GET_ACCOUNT_QUERY = gql`
   }
 `;
 
-const AccountList = () => {
+const AccountList = ({ needRefresh }) => {
   const { data, loading, refetch, fetchMore } = useQuery(GET_ACCOUNT_QUERY, {
     variables: { offset: 0 },
   });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     if (!loading) {
@@ -47,8 +49,6 @@ const AccountList = () => {
       isShownAccountsFabVar(true);
     }
   }, [scrollY]);
-
-  const [refreshing, setRefreshing] = useState(false);
 
   return (
     <FlatList
