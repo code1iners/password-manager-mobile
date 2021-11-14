@@ -10,7 +10,8 @@ import ErrorMessage from "../../components/shared/ErrorMessage";
 import useAccount, { CREATE_ACCOUNT_MUTATION } from "../../hooks/useAccount";
 import colors from "../../utils/colors";
 import { ReactNativeFile } from "extract-files";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 const Container = styled.View`
   flex: 1;
@@ -21,6 +22,7 @@ const SelectPhotoContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
 `;
 const SelectPhotoButton = styled.TouchableOpacity`
   background-color: ${colors.secondary};
@@ -44,18 +46,48 @@ const SelectPhotoImage = styled.Image`
   margin-right: 20px;
 `;
 
+const UPDATE_ACCOUNT_MUTATION = gql`
+  mutation updateAccount(
+    $id: Int!
+    $title: String
+    $subtitle: String
+    $accountName: String
+    $accountPassword: String
+    $thumbnail: Upload
+  ) {
+    updateAccount(
+      id: $id
+      title: $title
+      subtitle: $subtitle
+      accountName: $accountName
+      accountPassword: $accountPassword
+      thumbnail: $thumbnail
+    ) {
+      id
+      title
+      subtitle
+      accountName
+      accountPassword
+      thumbnail
+    }
+  }
+`;
+
 const AccountCreateScreen = ({ route, navigation }) => {
   const { register, watch, handleSubmit, setValue, getValues } = useForm();
   const [titleError, setTitleError] = useState("");
   const [subtitleError, setSubtitleError] = useState("");
   const [accountNameError, setAccountNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isCreateMode, setIsCreateMode] = useState(true);
 
-  const { selectedPhoto } = route.params || {};
+  const { account = null, selectedPhoto = null } = route.params || {};
 
-  const [createAccountMutation, { loading }] = useMutation(
-    CREATE_ACCOUNT_MUTATION
-  );
+  const [createAccountMutation, { loading: createAccountLoading }] =
+    useMutation(CREATE_ACCOUNT_MUTATION);
+
+  const [updateAccountMutation, { loading, updateAccountLoading }] =
+    useMutation(UPDATE_ACCOUNT_MUTATION);
 
   const titleRef = useRef();
   const subtitleRef = useRef();
@@ -86,78 +118,73 @@ const AccountCreateScreen = ({ route, navigation }) => {
     navigation.navigate("SelectPhoto", { from: "AccountCreateScreen" });
   };
 
-  // Handle form submit.
-  const handleFormSubmit = () => {
-    // Clear errors.
-    clearErrors();
-
-    const title = getValues("title");
-    const subtitle = getValues("subtitle");
-    const accountName = getValues("accountName");
-    const accountPassword = getValues("accountPassword");
-    let thumbnail;
-    if (selectedPhoto) {
-      thumbnail = new ReactNativeFile({
-        uri: selectedPhoto,
-        name: "account",
-        type: "image/jpeg",
-      });
-    }
-
-    // Empty text validate.
-    if (!title) {
-      setTitleError("Title is required.");
-      onNext(titleRef);
-      return;
-    }
-    if (!subtitle) {
-      setSubtitleError("Subtitle is required.");
-      onNext(subtitleRef);
-      return;
-    }
-    if (!accountName) {
-      setAccountNameError("Account name is required.");
-      onNext(accountNameRef);
-      return;
-    }
-    if (!accountPassword) {
-      setPasswordError("Account Password is required.");
-      onNext(passwordRef);
-      return;
-    }
-
-    onValid({
-      title,
-      subtitle,
-      accountName,
-      accountPassword,
-      ...(thumbnail && { thumbnail }),
-    });
-  };
-
   const updateUploadAccount = (cache, result) => {
-    const {
-      data: { createAccount },
-    } = result;
-    if (createAccount.id) {
-      cache.modify({
-        id: "ROOT_QUERY",
-        fields: {
-          accounts(previous) {
-            return [createAccount, ...previous];
-          },
-        },
-      });
+    // Clear inputs.
+    clearInputs();
 
-      clearInputs();
-      Alert.alert("Success", "You have successfully created a new account.", [
-        {
-          text: "OK",
-          onPress: handleOkClick,
-        },
-      ]);
-    } else {
-      Alert.alert("Failure", "Failed created a new account.");
+    const {
+      data: { createAccount, updateAccount },
+    } = result;
+
+    switch (isCreateMode) {
+      case true:
+        console.log(createAccount);
+        if (createAccount?.id) {
+          const id = "ROOT_QUERY";
+          cache.modify({
+            id,
+            fields: {
+              accounts(previous) {
+                return [createAccount, ...previous];
+              },
+            },
+          });
+
+          Alert.alert(
+            "Success",
+            "You have successfully created a new account.",
+            [
+              {
+                text: "OK",
+                onPress: handleOkClick,
+              },
+            ]
+          );
+        } else {
+          Alert.alert("Failure", "Failed created a new account.");
+        }
+        break;
+
+      case false:
+        if (updateAccount?.id) {
+          const id = "ROOT_QUERY";
+          cache.modify({
+            id,
+            fields: {
+              accounts(prev) {
+                console.log(prev);
+                return prev?.map(({ __ref }) => {
+                  if (__ref === `Account:${updateAccount.id}`) {
+                    return {
+                      __ref,
+                      ...updateAccount,
+                    };
+                  }
+                });
+              },
+            },
+          });
+
+          Alert.alert("Success", "You have successfully updated a account.", [
+            {
+              text: "OK",
+              onPress: handleOkClick,
+            },
+          ]);
+        } else {
+          Alert.alert("Failure", "Failed updated a new account.");
+        }
+        break;
     }
   };
 
@@ -169,30 +196,78 @@ const AccountCreateScreen = ({ route, navigation }) => {
    * @param {String} accountPassword > Account accountPassword.
    * @param {String} thumbnail > Account thumbnail.
    */
-  const onValid = ({
-    title,
-    subtitle,
-    accountName,
-    accountPassword,
-    thumbnail,
-  }) => {
-    createAccountMutation({
-      variables: {
-        title,
-        subtitle,
-        accountName,
-        accountPassword,
-        thumbnail,
-      },
-      update: updateUploadAccount,
-    });
+  const onValid = ({ title, subtitle, accountName, accountPassword }) => {
+    // Clear errors.
+    clearErrors();
+
+    let thumbnail;
+    if (selectedPhoto) {
+      thumbnail = new ReactNativeFile({
+        uri: selectedPhoto,
+        name: "account",
+        type: "image/jpeg",
+      });
+    }
+
+    switch (isCreateMode) {
+      case true:
+        if (!createAccountLoading) {
+          createAccountMutation({
+            variables: {
+              title,
+              subtitle,
+              accountName,
+              accountPassword,
+              ...(thumbnail && { thumbnail }),
+            },
+            update: updateUploadAccount,
+          });
+        }
+        break;
+
+      case false:
+        if (!updateAccountLoading) {
+          updateAccountMutation({
+            variables: {
+              id: account?.id,
+              title,
+              subtitle,
+              accountName,
+              accountPassword,
+              ...(thumbnail && { thumbnail }),
+            },
+            update: updateUploadAccount,
+          });
+        }
+        break;
+    }
+  };
+
+  const onInvalid = ({ title, accountName, accountPassword }) => {
+    // Clear errors.
+    clearErrors();
+
+    if (title) {
+      setTitleError("Title is required.");
+      onNext(titleRef);
+      return;
+    }
+
+    if (accountName) {
+      setAccountNameError("Account name is required.");
+      onNext(accountNameRef);
+      return;
+    }
+
+    if (accountPassword) {
+      setPasswordError("Account Password is required.");
+      onNext(passwordRef);
+      return;
+    }
   };
 
   useEffect(() => {
     register("title", {
-      required: true,
-    });
-    register("subtitle", {
       required: true,
     });
     register("accountName", {
@@ -202,10 +277,19 @@ const AccountCreateScreen = ({ route, navigation }) => {
       required: true,
     });
 
+    if (account) {
+      setValue("title", account?.title);
+      setValue("subtitle", account?.subtitle);
+      setValue("accountName", account?.accountName);
+      setValue("accountPassword", account?.accountPassword);
+      setValue("thumbnail", account?.thumbnail);
+      setIsCreateMode(false);
+    }
+
     setTimeout(() => {
       titleRef?.current.focus();
     }, 10);
-  }, []);
+  }, [register]);
 
   return (
     <KeyboardAwareScrollView extraScrollHeight={-80} extraHeight={-80}>
@@ -285,6 +369,12 @@ const AccountCreateScreen = ({ route, navigation }) => {
                 uri: selectedPhoto,
               }}
             />
+          ) : account?.thumbnail ? (
+            <SelectPhotoImage
+              source={{
+                uri: account?.thumbnail,
+              }}
+            />
           ) : null}
 
           <SelectPhotoButton
@@ -296,7 +386,10 @@ const AccountCreateScreen = ({ route, navigation }) => {
           </SelectPhotoButton>
         </SelectPhotoContainer>
 
-        <SimpleButton buttonText="Create Account" onPress={handleFormSubmit} />
+        <SimpleButton
+          buttonText={isCreateMode ? "Create Account" : "Update Account"}
+          onPress={handleSubmit(onValid, onInvalid)}
+        />
       </Container>
     </KeyboardAwareScrollView>
   );

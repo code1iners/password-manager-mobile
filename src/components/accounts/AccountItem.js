@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import colors from "../../utils/colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "react-native";
-import { cache } from "../../../apollo";
+import { useNavigation } from "@react-navigation/core";
 
 const AccountItemContainer = styled.View`
   flex-direction: row;
@@ -22,9 +22,10 @@ const ItemColumn = styled.View`
 `;
 
 const ItemThumbnailWrapper = styled.View`
-  flex: 0.25;
+  width: 50px;
   justify-content: center;
   align-items: flex-start;
+  margin-right: 10px;
 `;
 const ItemThumbnail = styled.Image`
   width: 50px;
@@ -57,8 +58,8 @@ const AccountItem = ({
   accountPassword,
   thumbnail,
 }) => {
+  const { navigate } = useNavigation();
   const { deleteAccount } = useAccount();
-
   /**
    * ### Delete account process.
    */
@@ -115,6 +116,25 @@ const AccountItem = ({
       {/* Actions */}
       <ItemColumn>
         <ItemRow>
+          <TouchableOpacity
+            style={{
+              marginRight: 10,
+            }}
+            onPress={() =>
+              navigate("AccountCreateScreen", {
+                account: {
+                  id,
+                  title,
+                  subtitle,
+                  accountName,
+                  accountPassword,
+                  thumbnail,
+                },
+              })
+            }
+          >
+            <Ionicons name="pencil-outline" size={18} color="tomato" />
+          </TouchableOpacity>
           <TouchableOpacity onPress={onDeleteClick}>
             <Ionicons name="remove-circle-outline" size={26} color="tomato" />
           </TouchableOpacity>

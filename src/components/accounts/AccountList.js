@@ -31,7 +31,7 @@ const EmptyText = styled.Text`
   opacity: 0.4;
 `;
 
-const AccountList = ({ needRefresh }) => {
+const AccountList = () => {
   const { data, loading, refetch, fetchMore } = useQuery(GET_ACCOUNT_QUERY, {
     variables: { offset: 0 },
   });

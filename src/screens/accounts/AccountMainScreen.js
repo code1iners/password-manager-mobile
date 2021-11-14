@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import Fab from "../../components/shared/Fab";
 import AccountList from "../../components/accounts/AccountList";
-import { isShownAccountsFabVar } from "../../../apollo";
+import client, { isShownAccountsFabVar } from "../../../apollo";
 import { useReactiveVar } from "@apollo/client";
-import useMe from "../../hooks/useMe";
+import { gql } from "@apollo/client";
 
 const Container = styled.View`
   flex: 1;
@@ -13,6 +13,8 @@ const Container = styled.View`
 
 const AccountMainScreen = ({ navigation }) => {
   const isShown = useReactiveVar(isShownAccountsFabVar);
+  const root = client.cache.data;
+  console.log(root.data);
 
   useEffect(() => {
     navigation.setOptions({

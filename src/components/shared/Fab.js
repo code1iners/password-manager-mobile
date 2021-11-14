@@ -40,7 +40,8 @@ const Fab = ({ onPress }) => {
     <Container onPress={onPress}>
       <Ionicons
         style={{
-          marginLeft: 4,
+          // marginLeft: 4,
+          marginTop: 4,
           transform: [
             {
               rotate: "45deg",

@@ -5,11 +5,13 @@ import { ItemSeparatorComponent } from "../../components/shared/ItemSeparatorCom
 
 const Container = styled.View`
   flex: 1;
+  padding: 10px;
 `;
 
 const Row = styled.TouchableOpacity`
   background-color: white;
   padding: 20px;
+  border-radius: 10px;
 `;
 
 const RowText = styled.Text`

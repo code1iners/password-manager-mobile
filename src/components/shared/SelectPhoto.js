@@ -63,10 +63,11 @@ const SelectPhoto = ({ navigation, route }) => {
   const getPermissions = async () => {
     const permissions = await MediaLibrary.getPermissionsAsync();
     const { accessPrivileges, canAskAgain, granted } = permissions;
-    if (canAskAgain && accessPrivileges === "none") {
+
+    if (canAskAgain) {
       const { accessPrivileges, granted } =
         await MediaLibrary.requestPermissionsAsync();
-      if (granted && accessPrivileges !== "none") {
+      if (granted) {
         if (accessPrivileges === "limited") {
           Alert.alert(
             "Caution",
