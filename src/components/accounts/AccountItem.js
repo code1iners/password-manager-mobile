@@ -20,10 +20,15 @@ const AccountItemContainer = styled.View`
 const ItemColumn = styled.View`
   justify-content: center;
 `;
+
+const ItemThumbnailWrapper = styled.View`
+  flex: 0.25;
+  justify-content: center;
+  align-items: flex-start;
+`;
 const ItemThumbnail = styled.Image`
   width: 50px;
   height: 50px;
-  margin-right: 12px;
   border-radius: 4px;
 `;
 
@@ -82,11 +87,18 @@ const AccountItem = ({
       {/* Info */}
       <ItemColumn style={{ flex: 1 }}>
         <ItemRow>
-          <ItemThumbnail
-            source={{
-              uri: thumbnail,
-            }}
-          />
+          <ItemThumbnailWrapper>
+            {thumbnail ? (
+              <ItemThumbnail
+                source={{
+                  uri: thumbnail,
+                }}
+              />
+            ) : (
+              <Ionicons name="image-outline" size={40} />
+            )}
+          </ItemThumbnailWrapper>
+
           <ItemColumn>
             {/* Account info header */}
             <ItemRow style={{ paddingBottom: 4 }}>

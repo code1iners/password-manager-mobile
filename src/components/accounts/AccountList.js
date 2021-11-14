@@ -19,6 +19,18 @@ const GET_ACCOUNT_QUERY = gql`
   }
 `;
 
+const EmptyContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+const EmptyText = styled.Text`
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  opacity: 0.4;
+`;
+
 const AccountList = ({ needRefresh }) => {
   const { data, loading, refetch, fetchMore } = useQuery(GET_ACCOUNT_QUERY, {
     variables: { offset: 0 },
@@ -50,7 +62,7 @@ const AccountList = ({ needRefresh }) => {
     }
   }, [scrollY]);
 
-  return (
+  return data?.accounts?.length ? (
     <FlatList
       onEndReachedThreshold={0.02}
       onEndReached={() =>
@@ -68,6 +80,10 @@ const AccountList = ({ needRefresh }) => {
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
     />
+  ) : (
+    <EmptyContainer>
+      <EmptyText>Try create new a account.</EmptyText>
+    </EmptyContainer>
   );
 };
 

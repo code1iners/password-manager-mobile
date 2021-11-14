@@ -53,8 +53,6 @@ const AccountCreateScreen = ({ route, navigation }) => {
 
   const { selectedPhoto } = route.params || {};
 
-  const { createAccount } = useAccount();
-
   const [createAccountMutation, { loading }] = useMutation(
     CREATE_ACCOUNT_MUTATION
   );
@@ -85,7 +83,7 @@ const AccountCreateScreen = ({ route, navigation }) => {
   const handleOkClick = () => navigation.navigate("AccountMainScreen");
 
   const handleSelectPhotoClick = () => {
-    navigation.navigate("SelectPhoto");
+    navigation.navigate("SelectPhoto", { from: "AccountCreateScreen" });
   };
 
   // Handle form submit.
@@ -97,11 +95,14 @@ const AccountCreateScreen = ({ route, navigation }) => {
     const subtitle = getValues("subtitle");
     const accountName = getValues("accountName");
     const accountPassword = getValues("accountPassword");
-    const thumbnail = new ReactNativeFile({
-      uri: selectedPhoto,
-      name: `${Date.now()}.jpg`,
-      type: "image/jpeg",
-    });
+    let thumbnail;
+    if (selectedPhoto) {
+      thumbnail = new ReactNativeFile({
+        uri: selectedPhoto,
+        name: `${Date.now()}.jpg`,
+        type: "image/jpeg",
+      });
+    }
 
     // Empty text validate.
     if (!title) {
@@ -130,7 +131,7 @@ const AccountCreateScreen = ({ route, navigation }) => {
       subtitle,
       accountName,
       accountPassword,
-      thumbnail,
+      ...(thumbnail && { thumbnail }),
     });
   };
 

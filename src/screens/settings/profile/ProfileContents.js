@@ -59,7 +59,7 @@ const ProfileContents = () => {
   /**
    * ### Cache clear.
    */
-  const updateDeleteUser = (cache, result) => {
+  const updateDeleteUser = (cache) => {
     cache.modify({
       id: "ROOT_QUERY",
       fields: {

@@ -27,6 +27,7 @@ const AccountNav = () => {
         name="SelectPhoto"
         component={SelectPhoto}
         options={{
+          title: "Select Photo",
           headerShown: true,
           headerBackTitleVisible: false,
         }}

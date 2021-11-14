@@ -45,7 +45,9 @@ const PhotoCheckedContainer = styled.View`
   right: 5px;
 `;
 
-const SelectPhoto = ({ navigation }) => {
+const SelectPhoto = ({ navigation, route }) => {
+  const { from } = route.params;
+
   const [ok, setOk] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState();
@@ -121,7 +123,7 @@ const SelectPhoto = ({ navigation }) => {
   }, []);
 
   const onSelectClick = () => {
-    navigation.navigate("AccountCreateScreen", {
+    navigation.navigate(from, {
       selectedPhoto,
     });
   };
