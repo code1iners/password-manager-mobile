@@ -11,7 +11,6 @@ import {
   SIGN_IN_TAB,
 } from "../../../utils/constants";
 import { authTabVar, createdAuth } from "../../../../apollo";
-import { ActivityIndicator } from "react-native";
 
 const SIGN_UP_MUTATION = gql`
   mutation signUp(

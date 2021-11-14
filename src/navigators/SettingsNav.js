@@ -2,7 +2,8 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import ProfileScreen from "../screens/settings/profile/ProfileScreen";
-import { Ionicons } from "@expo/vector-icons";
+import SelectPhoto from "../components/shared/SelectPhoto";
+import ProfileUpdateScreen from "../screens/settings/profile/profileUpdate/ProfileUpdateScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,15 +21,25 @@ const SettingsNav = () => {
         name="ProfileScreen"
         component={ProfileScreen}
         options={{
+          title: "Profile",
           headerBackTitleVisible: false,
-          headerBackImage: ({ tintColor }) => (
-            <Ionicons
-              style={{ marginLeft: 10 }}
-              color={tintColor}
-              name="md-close-sharp"
-              size={30}
-            />
-          ),
+        }}
+      />
+      <Stack.Screen
+        name="ProfileUpdateScreen"
+        component={ProfileUpdateScreen}
+        options={{
+          title: "Profile Update",
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="SelectPhoto"
+        component={SelectPhoto}
+        options={{
+          title: "Select Photo",
+          headerShown: true,
+          headerBackTitleVisible: false,
         }}
       />
     </Stack.Navigator>

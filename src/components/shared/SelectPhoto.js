@@ -13,6 +13,7 @@ import * as MediaLibrary from "expo-media-library";
 import colors from "../../utils/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import HeaderRightTextButton from "./HeaderRightTextButton";
 
 const Container = styled.View`
   flex: 1;
@@ -128,9 +129,7 @@ const SelectPhoto = ({ navigation, route }) => {
     });
   };
   const HeaderRight = () => (
-    <TouchableOpacity onPress={onSelectClick}>
-      <SelectText>Select</SelectText>
-    </TouchableOpacity>
+    <HeaderRightTextButton text="Select" onPress={onSelectClick} />
   );
   useEffect(() => {
     navigation.setOptions({

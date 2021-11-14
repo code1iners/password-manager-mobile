@@ -38,6 +38,11 @@ const InfoContainer = styled.View`
   justify-content: space-around;
 `;
 
+const AvatarImage = styled.Image`
+  width: 80px;
+  height: 80px;
+`;
+
 const Username = styled.Text`
   font-size: 22px;
   letter-spacing: 1.5px;
@@ -58,7 +63,11 @@ const ProfileHeader = ({ username, email, avatar }) => {
     <Container>
       <AvatarContainer>
         <AvatarWrapper>
-          <Ionicons name="person-outline" size={50} />
+          {avatar ? (
+            <AvatarImage source={{ uri: avatar }} />
+          ) : (
+            <Ionicons name="person-outline" size={50} />
+          )}
         </AvatarWrapper>
       </AvatarContainer>
       <InfoContainer>

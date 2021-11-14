@@ -18,6 +18,7 @@ const SIGN_IN_MUTATION = gql`
   mutation signIn($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
       ok
+      id
       token
       error
     }
@@ -63,7 +64,7 @@ const SignInBody = () => {
   // Mutations.
   const onCompleted = (data) => {
     const {
-      signIn: { ok, token, error, errorCode },
+      signIn: { ok, id, token, error, errorCode },
     } = data;
     if (ok) {
       // Sign in user.

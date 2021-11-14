@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoggedOutNav from "./src/navigators/LoggedOutNav";
 import LoggedInNav from "./src/navigators/LoggedInNav";
 import { TOKEN } from "./src/utils/constants";
+import useMe from "./src/hooks/useMe";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ export default function App() {
   };
   const preload = async () => {
     const token = await AsyncStorage.getItem(TOKEN);
+
     if (token) {
       isLoggedInVar(true);
       tokenVar(token);

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { View, Text, Alert, FlatList } from "react-native";
-import { userSignOut } from "../../hooks/useAuth";
+import { FlatList } from "react-native";
 import { ItemSeparatorComponent } from "../../components/shared/ItemSeparatorComponent";
 
 const Container = styled.View`

@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AccountMainScreen from "../screens/accounts/AccountMainScreen";
 import AccountCreateScreen from "../screens/accounts/AccountCreateScreen";
 import SelectPhoto from "../components/shared/SelectPhoto";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text } from "react-native";
 
 const Stack = createStackNavigator();
 

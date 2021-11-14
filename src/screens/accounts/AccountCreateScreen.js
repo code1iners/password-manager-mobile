@@ -99,7 +99,7 @@ const AccountCreateScreen = ({ route, navigation }) => {
     if (selectedPhoto) {
       thumbnail = new ReactNativeFile({
         uri: selectedPhoto,
-        name: `${Date.now()}.jpg`,
+        name: "account",
         type: "image/jpeg",
       });
     }

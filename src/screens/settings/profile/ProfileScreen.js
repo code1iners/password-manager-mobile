@@ -1,36 +1,32 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import useMe from "../../../hooks/useMe";
-import colors from "../../../utils/colors";
 import ProfileHeader from "./ProfileHeader";
-import { TouchableOpacity } from "react-native";
 import ProfileContents from "./ProfileContents";
+import HeaderRightTextButton from "../../../components/shared/HeaderRightTextButton";
+import useMe from "../../../hooks/useMe";
 
 const Container = styled.View`
   flex: 1;
   padding: 10px;
 `;
 
-const HeaderRightButtonText = styled.Text`
-  color: ${colors.blue};
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 10px;
-`;
-
 const ProfileScreen = ({ navigation }) => {
   const me = useMe();
+  useEffect(() => {
+    if (me) {
+      navigation.setOptions({
+        title: me?.username,
+      });
+    }
+  }, [me]);
 
-  const handleHeaderRightClick = () => {};
+  const handleHeaderRightClick = () =>
+    navigation.navigate("ProfileUpdateScreen");
+
   useEffect(() => {
     navigation.setOptions({
-      title: me?.username,
       headerRight: () => (
-        <TouchableOpacity onPress={handleHeaderRightClick}>
-          <HeaderRightButtonText>Edit</HeaderRightButtonText>
-        </TouchableOpacity>
+        <HeaderRightTextButton text="Edit" onPress={handleHeaderRightClick} />
       ),
     });
   }, []);
