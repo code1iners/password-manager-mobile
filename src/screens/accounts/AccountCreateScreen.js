@@ -115,7 +115,10 @@ const AccountCreateScreen = ({ route, navigation }) => {
   const handleOkClick = () => navigation.navigate("AccountMainScreen");
 
   const handleSelectPhotoClick = () => {
-    navigation.navigate("SelectPhoto", { from: "AccountCreateScreen" });
+    navigation.navigate("SelectPhoto", {
+      from: "AccountCreateScreen",
+      params: { ...route.params },
+    });
   };
 
   const updateUploadAccount = (cache, result) => {
@@ -162,14 +165,15 @@ const AccountCreateScreen = ({ route, navigation }) => {
             id,
             fields: {
               accounts(prev) {
-                console.log(prev);
-                return prev?.map(({ __ref }) => {
-                  if (__ref === `Account:${updateAccount.id}`) {
+                const updatedRef = `Account:${updateAccount?.id}`;
+                return prev?.map((item) => {
+                  if (item?.__ref === updatedRef) {
                     return {
-                      __ref,
+                      ...item,
                       ...updateAccount,
                     };
                   }
+                  return item;
                 });
               },
             },

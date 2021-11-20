@@ -47,7 +47,7 @@ const PhotoCheckedContainer = styled.View`
 `;
 
 const SelectPhoto = ({ navigation, route }) => {
-  const { from } = route.params;
+  const { from, params } = route.params;
 
   const [ok, setOk] = useState(false);
   const [photos, setPhotos] = useState([]);
@@ -127,6 +127,7 @@ const SelectPhoto = ({ navigation, route }) => {
   const onSelectClick = () => {
     navigation.navigate(from, {
       selectedPhoto,
+      ...params,
     });
   };
   const HeaderRight = () => (
