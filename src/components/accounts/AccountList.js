@@ -63,7 +63,7 @@ const AccountList = () => {
     }
   }, [scrollY]);
 
-  return !data?.accounts?.length ? (
+  return data?.accounts?.length ? (
     <FlatList
       onEndReachedThreshold={0.02}
       onEndReached={() =>
