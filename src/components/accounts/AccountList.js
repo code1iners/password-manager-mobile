@@ -29,6 +29,7 @@ const EmptyText = styled.Text`
   font-weight: 600;
   letter-spacing: 2px;
   opacity: 0.4;
+  text-align: center;
 `;
 
 const AccountList = () => {
@@ -62,7 +63,7 @@ const AccountList = () => {
     }
   }, [scrollY]);
 
-  return data?.accounts?.length ? (
+  return !data?.accounts?.length ? (
     <FlatList
       onEndReachedThreshold={0.02}
       onEndReached={() =>

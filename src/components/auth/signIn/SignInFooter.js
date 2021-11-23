@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   margin-top: 40px;
@@ -39,6 +40,9 @@ const ButtonText = styled.Text`
 `;
 
 const SignInFooter = () => {
+  const alertMessage = () => {
+    Alert.alert("Sorry :)", "Service is being prepared.");
+  };
   return (
     <Container>
       {/* Title text */}
@@ -48,11 +52,11 @@ const SignInFooter = () => {
 
       {/* Buttons */}
       <ButtonsContainer>
-        <ButtonWrapper>
+        <ButtonWrapper onPress={alertMessage}>
           <Ionicons name="logo-google" size={20} />
           <ButtonText>Google</ButtonText>
         </ButtonWrapper>
-        <ButtonWrapper>
+        <ButtonWrapper onPress={alertMessage}>
           <Ionicons name="logo-facebook" size={20} />
           <ButtonText>Facebook</ButtonText>
         </ButtonWrapper>

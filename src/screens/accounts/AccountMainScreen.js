@@ -14,7 +14,6 @@ const Container = styled.View`
 const AccountMainScreen = ({ navigation }) => {
   const isShown = useReactiveVar(isShownAccountsFabVar);
   const root = client.cache.data;
-  console.log(root.data);
 
   useEffect(() => {
     navigation.setOptions({

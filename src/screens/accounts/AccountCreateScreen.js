@@ -131,7 +131,6 @@ const AccountCreateScreen = ({ route, navigation }) => {
 
     switch (isCreateMode) {
       case true:
-        console.log(createAccount);
         if (createAccount?.id) {
           const id = "ROOT_QUERY";
           cache.modify({
